@@ -1,0 +1,73 @@
+run:
+  timeout: 10m
+  go: '1.20'
+  skip-dirs:
+    - mocks
+
+linters-settings:
+  staticcheck:
+    go: "1.20"
+    checks: [ "all" ]
+
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - opinionated
+      - performance
+      - style
+
+  govet:
+    enable-all: true
+
+  lll:
+    line-length: 120
+    tab-width: 1
+
+  maligned:
+    suggest-new: true
+
+linters:
+  disable-all: true
+  enable:
+    - goimports
+    - unused
+    - errcheck
+    - govet
+    - ineffassign
+    - prealloc
+    - gocritic
+    - misspell
+    - unconvert
+    - whitespace
+    - gofmt
+    - bodyclose
+    - depguard
+    - dogsled
+    - exportloopref
+    - exhaustive
+    - nakedret
+    - nolintlint
+    - typecheck
+    - unparam
+    - asciicheck
+    - godot
+    - staticcheck
+    - goheader
+    - nestif
+    - unused
+    - predeclared
+    - gosimple
+    - wastedassign
+    - revive
+    - gomoddirectives
+    - gomodguard
+    - gofumpt
+    - gci
+    - makezero
+    - nilnil
+    - tenv
+    - loggercheck
+    - usestdlibvars
+
+service:
+  golangci-lint-version: 1.52.x # use a fixed version to avoid introducing unexpected linters
