@@ -117,3 +117,4 @@ go.work
 # project ignore
 vendingd
 bin/
+.test.profile.cov
