@@ -53,6 +53,11 @@ develop-dependencies:
 	if [ -z "$$(which gci)" ]; then go install github.com/daixiang0/gci@latest; fi
 	if [ -z "$$(which fieldalignment)" ]; then go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest; fi
 
+generate-proto:
+	docker run --rm --volume "${TOPDIR}/api:/workspace" --workdir /workspace bufbuild/buf generate
+	mv api/gen/go/* pkg/vendingMachineService
+	rm -rf api/gen
+
 ## Project Vars ########################################################################################################
 ROOT := github.com/maze1377/manager-vending-machine
 .PHONY: help update-dependencies dependencies vendingd test clean
@@ -68,3 +73,4 @@ BUILD_TIME := $(shell LANG=en_US date +"%F_%T_%z")
 LINTER_VERSION ?= v1.52.2
 LD_FLAGS := -X $(ROOT).Version=$(VERSION) -X $(ROOT).Commit=$(COMMIT) -X $(ROOT).BuildTime=$(BUILD_TIME)
 TAGS := static # Set to `dynamic` for macOS on Apple Silicon
+TOPDIR=$(PWD)
