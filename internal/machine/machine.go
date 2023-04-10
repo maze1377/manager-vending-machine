@@ -1,73 +1,122 @@
 package machine
 
 import (
-	"bufio"
-	"fmt"
-	"io"
-	"os"
 	"sync"
 
 	"github.com/maze1377/manager-vending-machine/internal/models"
 )
 
-var (
-	once           sync.Once
-	singleInstance *VendingMachine
-)
+// TODO We need to implement a mechanism to reset the Vending Machine system from a non-idle state to an idle state if no commands are received within a certain time period. This mechanism is commonly referred to as a 'watchdog'."
 
 type VendingMachine struct {
 	currentState State
-	reader       io.Reader
-	writer       io.Writer
+	observers    sync.Map
+	uidWorker    string
 	products     []*models.Product
+	lSession     sync.Mutex
+	lState       sync.Mutex
 }
 
-func GetInstance() *VendingMachine {
-	once.Do(func() {
-		singleInstance = &VendingMachine{
-			reader: os.Stdin,
-			writer: os.Stdout,
-			products: []*models.Product{
-				models.NewProduct("watter", 1),
-				models.NewProduct("soda", 3),
-				models.NewProduct("coffee", 2),
-			},
-		}
-		singleInstance.currentState = NewReadyState(singleInstance)
-	})
-	return singleInstance
+func (vm *VendingMachine) canAccessVendingMachine(uid string) bool {
+	vm.lSession.Lock()
+	defer vm.lSession.Unlock()
+	if vm.uidWorker != "" && vm.uidWorker != uid {
+		return false
+	}
+	if vm.uidWorker == "" {
+		vm.uidWorker = uid
+	}
+	return true
 }
 
-func (vm *VendingMachine) getProducts() []*models.Product {
+func (vm *VendingMachine) AddItem(uid string, product *models.Product) error {
+	if !vm.canAccessVendingMachine(uid) {
+		return ErrMachineBusyNow
+	}
+	vm.lState.Lock()
+	defer vm.lState.Unlock()
+	err := vm.currentState.AddItem(product)
+	if err == nil {
+		vm.lSession.Lock()
+		defer vm.lSession.Unlock()
+		vm.uidWorker = ""
+	}
+	return err
+}
+
+func (vm *VendingMachine) SelectProduct(uid, productName string) error {
+	if !vm.canAccessVendingMachine(uid) {
+		return ErrMachineBusyNow
+	}
+	vm.lState.Lock()
+	defer vm.lState.Unlock()
+	return vm.currentState.SelectProduct(productName)
+}
+
+func (vm *VendingMachine) DispenseProduct(uid, productName string) error {
+	if !vm.canAccessVendingMachine(uid) {
+		return ErrMachineBusyNow
+	}
+	vm.lState.Lock()
+	defer vm.lState.Unlock()
+	err := vm.currentState.DispenseProduct(productName)
+	if err == nil {
+		vm.lSession.Lock()
+		defer vm.lSession.Unlock()
+		vm.uidWorker = ""
+	}
+	return err
+}
+
+func (vm *VendingMachine) InsertMoney(uid string, coin int) error {
+	if !vm.canAccessVendingMachine(uid) {
+		return ErrMachineBusyNow
+	}
+	vm.lState.Lock()
+	defer vm.lState.Unlock()
+	return vm.currentState.InsertMoney(coin)
+}
+
+func NewVendingMachine(products []*models.Product) *VendingMachine {
+	vm := &VendingMachine{products: products}
+	vm.currentState = NewReadyState(vm)
+	return vm
+}
+
+func (vm *VendingMachine) GetProducts() []*models.Product {
+	// maybe we want to isolate VendingMachine so we should copy product list.
 	return vm.products
 }
 
-func (vm *VendingMachine) println(a ...any) {
-	_, _ = fmt.Fprintln(vm.writer, a...)
-}
-
-func (vm *VendingMachine) readText() string {
-	scanner := bufio.NewScanner(vm.reader)
-	scanner.Scan()
-	return scanner.Text()
-}
-
-func (vm *VendingMachine) Start() {
-	vm.println("welcome to VendingMachine")
-	for {
-		cmds := make(map[string]func() State)
-		vm.println("1-insertMoney")
-		cmds["1"] = vm.currentState.insertMoney
-		vm.println("2-interactWithMenu")
-		cmds["2"] = vm.currentState.interactWithMenu
-		vm.println("3-dispenseProduct")
-		cmds["3"] = vm.currentState.dispenseProduct
-		vm.println("4-dispenseMoney")
-		cmds["4"] = vm.currentState.dispenseMoney
-
-		input := vm.readText()
-		if cmd, ok := cmds[input]; ok {
-			vm.currentState = cmd()
+func (vm *VendingMachine) findItem(productName string) (*models.Product, error) {
+	for _, product := range vm.products {
+		if product.Name == productName {
+			return product, nil
 		}
 	}
+	return nil, ErrProductNotFound
+}
+
+func (vm *VendingMachine) addNewProduct(product *models.Product) {
+	vm.products = append(vm.products, product)
+}
+
+func (vm *VendingMachine) AddObserver(id string, fn func(event models.Event, date ...interface{})) {
+	vm.observers.Store(id, fn)
+}
+
+func (vm *VendingMachine) RemoveObserver(id string) {
+	vm.observers.Delete(id)
+}
+
+func (vm *VendingMachine) NotifyObservers(event models.Event, date ...interface{}) {
+	vm.observers.Range(func(key, value interface{}) bool {
+		fn := value.(func(event models.Event, date ...interface{}))
+		fn(event, date)
+		return true
+	})
+}
+
+func (vm *VendingMachine) setCurrentState(currentState State) {
+	vm.currentState = currentState
 }

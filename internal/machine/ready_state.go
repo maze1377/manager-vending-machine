@@ -1,30 +1,37 @@
 package machine
 
-type ReadyState struct {
-	machine *VendingMachine
-}
+import (
+	"errors"
 
-func (r *ReadyState) insertMoney() State {
-	return NewPaymentState(r.machine)
-}
+	"github.com/maze1377/manager-vending-machine/internal/models"
+)
 
-func (r *ReadyState) interactWithMenu() State {
-	r.machine.println("Please insert a coin first")
-	return r
-}
-
-func (r *ReadyState) dispenseProduct() State {
-	r.machine.println("Please insert a coin first")
-	return r
-}
-
-func (r *ReadyState) dispenseMoney() State {
-	r.machine.println("Please insert a coin first")
-	return r
+type readyState struct {
+	DefaultBehaviour
 }
 
 func NewReadyState(machine *VendingMachine) State {
-	machine.println("Ready")
-	machine.println("-----------------------")
-	return &ReadyState{machine}
+	return &readyState{
+		DefaultBehaviour{machine: machine},
+	}
+}
+
+func (r *readyState) AddItem(product *models.Product) error {
+	foundProduct, err := r.machine.findItem(product.Name)
+	if err != nil {
+		if !errors.Is(err, ErrProductNotFound) {
+			return err
+		}
+		r.machine.addNewProduct(product)
+		return nil
+	}
+	// If the item already exists, we increase its quantity.
+	// Note that we assume the price does not change. If the price changes, we need to rename the item.
+	foundProduct.Quantity += product.Quantity
+	return nil
+}
+
+func (r *readyState) InsertMoney(coin int) error {
+	r.machine.setCurrentState(NewPaymentState(r.machine, coin))
+	return nil
 }

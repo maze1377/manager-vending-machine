@@ -37,12 +37,13 @@ message ExecuteCommandRequest {
   enum CommandType {
     COMMAND_TYPE_UNSPECIFIED = 0;
     COMMAND_TYPE_ADD_PRODUCT = 1;
-    COMMAND_TYPE_SELECT_ITEM = 2;
+    COMMAND_TYPE_SELECT_PRODUCT = 2;
     COMMAND_TYPE_PROCESS_PAYMENT = 3;
-    COMMAND_TYPE_DISPENSE_ITEM = 4;
+    COMMAND_TYPE_DISPENSE_PRODUCT = 4;
   }
 
   CommandType type = 1;
+  string uid = 6;
 
   oneof payload {
     Product product = 2;
@@ -73,7 +74,7 @@ message NotifyEventResponse {
   enum EventType {
     EVENT_TYPE_UNSPECIFIED = 0;
     EVENT_TYPE_PAYMENT_PROCESSED = 1;
-    EVENT_TYPE_ITEM_DISPENSED = 2;
+    EVENT_TYPE_PRODUCT_DISPENSED = 2;
   }
 
   EventType type = 1;
