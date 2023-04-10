@@ -71,7 +71,9 @@ func RunMachine(_ *cobra.Command, _ []string) {
 	)
 	gRPCServer := grpc.NewServer(opts...)
 	pb.RegisterVendingMachineServiceServer(gRPCServer, machineService)
-	handleSignals(gRPCServer)
+	handleSignals(func() {
+		go gRPCServer.GracefulStop()
+	})
 
 	if err = gRPCServer.Serve(conn); err != nil {
 		log.WithError(err).Fatal("Error while apiHandler.Serve()")
@@ -79,7 +81,7 @@ func RunMachine(_ *cobra.Command, _ []string) {
 	<-time.After(10 * time.Second)
 }
 
-func handleSignals(grpcServer *grpc.Server) {
+func handleSignals(shutdown func()) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -91,7 +93,7 @@ func handleSignals(grpcServer *grpc.Server) {
 			// issue of Kubernetes that leads to not marking pod unready
 			// in cases of termination.
 			<-time.After(3 * time.Second)
-			go grpcServer.GracefulStop()
+			shutdown()
 			<-time.After(7 * time.Second)
 			break
 		}

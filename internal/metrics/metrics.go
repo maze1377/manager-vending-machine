@@ -3,7 +3,7 @@ package metrics
 import "time"
 
 // Metric is an interface which defines metric handlers
-// for example Prometheus is a metric handler which implements this interfaces
+// for example Prometheus is a metric handler which implements this interfaces.
 type Metric interface {
 	NewTimer(c TimerConfig, labels ...string) Timer
 	NewCounter(c CounterConfig, labels ...string) Counter
@@ -34,5 +34,7 @@ type CounterConfig struct {
 }
 
 type CommunicatorConfig struct {
-	TimerConfig
+	Name    string
+	Help    string
+	Buckets []float64
 }

@@ -24,7 +24,7 @@ func main() {
 
 	client := pb.NewVendingMachineServiceClient(conn)
 
-	callExecuteCommandRequestAddProduct(client)
+	callExecuteCommandRequestProcessPayment(client)
 }
 
 func callGetProductRequest(client pb.VendingMachineServiceClient) {
@@ -49,6 +49,38 @@ func callExecuteCommandRequestAddProduct(client pb.VendingMachineServiceClient) 
 				Name:     "test-product",
 				Quantity: 10,
 				Price:    100.0,
+			},
+		},
+	}
+	service, err := client.ExecuteCommand(context.Background())
+	if err != nil {
+		log.Fatalf("could not call ExecuteCommand %v", err)
+	}
+
+	err = service.Send(params)
+	if err != nil {
+		log.Fatalf("could not call send %v", err)
+	}
+
+	res, err := service.Recv()
+	if err != nil {
+		log.Fatalf("could not call recv %v", err)
+	}
+
+	fmt.Println("input:")
+	spew.Dump(params)
+	fmt.Println("output:")
+	spew.Dump(res)
+}
+
+func callExecuteCommandRequestProcessPayment(client pb.VendingMachineServiceClient) {
+	params := &pb.ExecuteCommandRequest{
+		Uid:  "test",
+		Type: pb.ExecuteCommandRequest_COMMAND_TYPE_PROCESS_PAYMENT,
+		Payload: &pb.ExecuteCommandRequest_PaymentRequest{
+			PaymentRequest: &pb.PaymentRequest{
+				Amount:        50,
+				PaymentMethod: "test-payment",
 			},
 		},
 	}

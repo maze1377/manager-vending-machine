@@ -27,12 +27,12 @@ func (s *simpleCommunicator) Done(started time.Time, method, status string) {
 
 func (p *simple) NewCommunicator(c CommunicatorConfig) Communicator {
 	timer := p.NewTimer(TimerConfig{
-		Name:    c.Name,
+		Name:    c.Name + "_timer",
 		Help:    c.Help,
 		Buckets: c.Buckets,
 	}, "method", "status")
 	counter := p.NewCounter(CounterConfig{
-		Name: c.Name,
+		Name: c.Name + "_counter",
 		Help: c.Help,
 	}, "method", "status")
 	return &simpleCommunicator{

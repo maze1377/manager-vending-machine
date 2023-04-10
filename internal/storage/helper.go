@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Migrate() {
+func Migrate() (db *gorm.DB) {
 	db, err := GetDataBase(config.Instance.DebugDb)
 	if err != nil {
 		logrus.WithError(err).Fatal("error while connecting to database")
@@ -18,6 +18,7 @@ func Migrate() {
 	logrus.Info("migration started")
 	migrate(db, &entity.EventLog{})
 	logrus.Info("migration successfully finished")
+	return db
 }
 
 func migrate(db *gorm.DB, model interface{}) {

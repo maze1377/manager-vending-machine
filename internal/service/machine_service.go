@@ -151,6 +151,7 @@ func (m *MachineService) ExecuteCommand(server pb.VendingMachineService_ExecuteC
 		case pb.ExecuteCommandRequest_COMMAND_TYPE_UNSPECIFIED:
 			return status.Error(codes.NotFound, "unspecified command type")
 		default:
+			log.WithField("cmd", cmd).Error("unknown command type")
 			return status.Error(codes.Unimplemented, "unknown command type")
 		}
 	}

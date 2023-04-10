@@ -10,7 +10,7 @@ type EventLog struct {
 	*Gorm[*entity.EventLog]
 }
 
-func NewEventLog(client *gorm.DB, watcher metrics.Communicator) *EventLog {
+func NewEventLog(client *gorm.DB, watcher metrics.Communicator) EventLogRepository {
 	return &EventLog{
 		Gorm: &Gorm[*entity.EventLog]{
 			TableSetting: TableSetting{
