@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type MachineService struct {
+type MachineService struct { // todo add monitoring
 	vm *machine.VendingMachine
 }
 
@@ -46,6 +46,7 @@ func (m *MachineService) ExecuteCommand(server pb.VendingMachineService_ExecuteC
 	for {
 		cmd, err := server.Recv()
 		if err != nil {
+			log.WithError(err).Error("error to send command")
 			return status.Errorf(codes.Unknown, "error receiving command: %s", err)
 		}
 		uid := cmd.GetUid()

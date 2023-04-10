@@ -7,11 +7,10 @@
 package vendingMachineService
 
 import (
-	reflect "reflect"
-	sync "sync"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	reflect "reflect"
+	sync "sync"
 )
 
 const (
@@ -127,8 +126,8 @@ func (NotifyEventResponse_EventType) EnumDescriptor() ([]byte, []int) {
 
 type GetProductRequest struct {
 	state         protoimpl.MessageState
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 }
 
 func (x *GetProductRequest) Reset() {
@@ -165,11 +164,12 @@ func (*GetProductRequest) Descriptor() ([]byte, []int) {
 
 type Product struct {
 	state         protoimpl.MessageState
-	Name          string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Quantity      int32   `protobuf:"varint,2,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	Price         float32 `protobuf:"fixed32,3,opt,name=price,proto3" json:"price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Name     string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Quantity int32   `protobuf:"varint,2,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	Price    float32 `protobuf:"fixed32,3,opt,name=price,proto3" json:"price,omitempty"`
 }
 
 func (x *Product) Reset() {
@@ -227,9 +227,10 @@ func (x *Product) GetPrice() float32 {
 
 type GetProductResponse struct {
 	state         protoimpl.MessageState
-	unknownFields protoimpl.UnknownFields
-	Products      []*Product `protobuf:"bytes,1,rep,name=products,proto3" json:"products,omitempty"`
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Products []*Product `protobuf:"bytes,1,rep,name=products,proto3" json:"products,omitempty"`
 }
 
 func (x *GetProductResponse) Reset() {
@@ -273,9 +274,10 @@ func (x *GetProductResponse) GetProducts() []*Product {
 
 type SelectProductRequest struct {
 	state         protoimpl.MessageState
-	ProductName   string `protobuf:"bytes,1,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ProductName string `protobuf:"bytes,1,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
 }
 
 func (x *SelectProductRequest) Reset() {
@@ -319,10 +321,11 @@ func (x *SelectProductRequest) GetProductName() string {
 
 type PaymentRequest struct {
 	state         protoimpl.MessageState
-	PaymentMethod string `protobuf:"bytes,2,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
 	Amount        float32 `protobuf:"fixed32,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	PaymentMethod string  `protobuf:"bytes,2,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`
 }
 
 func (x *PaymentRequest) Reset() {
@@ -373,9 +376,10 @@ func (x *PaymentRequest) GetPaymentMethod() string {
 
 type DispenseRequest struct {
 	state         protoimpl.MessageState
-	ProductName   string `protobuf:"bytes,1,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ProductName string `protobuf:"bytes,1,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
 }
 
 func (x *DispenseRequest) Reset() {
@@ -418,12 +422,18 @@ func (x *DispenseRequest) GetProductName() string {
 }
 
 type ExecuteCommandRequest struct {
-	Payload       isExecuteCommandRequest_Payload `protobuf_oneof:"payload"`
 	state         protoimpl.MessageState
-	Uid           string `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Type          ExecuteCommandRequest_CommandType `protobuf:"varint,1,opt,name=type,proto3,enum=vending_machine.v1.ExecuteCommandRequest_CommandType" json:"type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Type ExecuteCommandRequest_CommandType `protobuf:"varint,1,opt,name=type,proto3,enum=vending_machine.v1.ExecuteCommandRequest_CommandType" json:"type,omitempty"`
+	Uid  string                            `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
+	// Types that are assignable to Payload:
+	//	*ExecuteCommandRequest_Product
+	//	*ExecuteCommandRequest_SelectProductRequest
+	//	*ExecuteCommandRequest_PaymentRequest
+	//	*ExecuteCommandRequest_DispenseRequest
+	Payload isExecuteCommandRequest_Payload `protobuf_oneof:"payload"`
 }
 
 func (x *ExecuteCommandRequest) Reset() {
@@ -537,10 +547,11 @@ func (*ExecuteCommandRequest_DispenseRequest) isExecuteCommandRequest_Payload() 
 
 type ExecuteCommandResponse struct {
 	state         protoimpl.MessageState
-	Message       string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Success bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 
 func (x *ExecuteCommandResponse) Reset() {
@@ -591,10 +602,11 @@ func (x *ExecuteCommandResponse) GetMessage() string {
 
 type DispenseResponse struct {
 	state         protoimpl.MessageState
-	Message       string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Success bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 
 func (x *DispenseResponse) Reset() {
@@ -645,10 +657,11 @@ func (x *DispenseResponse) GetMessage() string {
 
 type PaymentResponse struct {
 	state         protoimpl.MessageState
-	Message       string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Success bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 
 func (x *PaymentResponse) Reset() {
@@ -698,11 +711,15 @@ func (x *PaymentResponse) GetMessage() string {
 }
 
 type NotifyEventResponse struct {
-	Payload       isNotifyEventResponse_Payload `protobuf_oneof:"payload"`
 	state         protoimpl.MessageState
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
-	Type          NotifyEventResponse_EventType `protobuf:"varint,1,opt,name=type,proto3,enum=vending_machine.v1.NotifyEventResponse_EventType" json:"type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+
+	Type NotifyEventResponse_EventType `protobuf:"varint,1,opt,name=type,proto3,enum=vending_machine.v1.NotifyEventResponse_EventType" json:"type,omitempty"`
+	// Types that are assignable to Payload:
+	//	*NotifyEventResponse_PaymentResponse
+	//	*NotifyEventResponse_DispenseResponse
+	Payload isNotifyEventResponse_Payload `protobuf_oneof:"payload"`
 }
 
 func (x *NotifyEventResponse) Reset() {
@@ -783,9 +800,10 @@ func (*NotifyEventResponse_DispenseResponse) isNotifyEventResponse_Payload() {}
 
 type NotifyEventRequest struct {
 	state         protoimpl.MessageState
-	Uid           string `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
-	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Uid string `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
 }
 
 func (x *NotifyEventRequest) Reset() {
@@ -976,27 +994,24 @@ func file_vending_machine_proto_rawDescGZIP() []byte {
 	return file_vending_machine_proto_rawDescData
 }
 
-var (
-	file_vending_machine_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-	file_vending_machine_proto_msgTypes  = make([]protoimpl.MessageInfo, 12)
-	file_vending_machine_proto_goTypes   = []interface{}{
-		(ExecuteCommandRequest_CommandType)(0), // 0: vending_machine.v1.ExecuteCommandRequest.CommandType
-		(NotifyEventResponse_EventType)(0),     // 1: vending_machine.v1.NotifyEventResponse.EventType
-		(*GetProductRequest)(nil),              // 2: vending_machine.v1.GetProductRequest
-		(*Product)(nil),                        // 3: vending_machine.v1.Product
-		(*GetProductResponse)(nil),             // 4: vending_machine.v1.GetProductResponse
-		(*SelectProductRequest)(nil),           // 5: vending_machine.v1.SelectProductRequest
-		(*PaymentRequest)(nil),                 // 6: vending_machine.v1.PaymentRequest
-		(*DispenseRequest)(nil),                // 7: vending_machine.v1.DispenseRequest
-		(*ExecuteCommandRequest)(nil),          // 8: vending_machine.v1.ExecuteCommandRequest
-		(*ExecuteCommandResponse)(nil),         // 9: vending_machine.v1.ExecuteCommandResponse
-		(*DispenseResponse)(nil),               // 10: vending_machine.v1.DispenseResponse
-		(*PaymentResponse)(nil),                // 11: vending_machine.v1.PaymentResponse
-		(*NotifyEventResponse)(nil),            // 12: vending_machine.v1.NotifyEventResponse
-		(*NotifyEventRequest)(nil),             // 13: vending_machine.v1.NotifyEventRequest
-	}
-)
-
+var file_vending_machine_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_vending_machine_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_vending_machine_proto_goTypes = []interface{}{
+	(ExecuteCommandRequest_CommandType)(0), // 0: vending_machine.v1.ExecuteCommandRequest.CommandType
+	(NotifyEventResponse_EventType)(0),     // 1: vending_machine.v1.NotifyEventResponse.EventType
+	(*GetProductRequest)(nil),              // 2: vending_machine.v1.GetProductRequest
+	(*Product)(nil),                        // 3: vending_machine.v1.Product
+	(*GetProductResponse)(nil),             // 4: vending_machine.v1.GetProductResponse
+	(*SelectProductRequest)(nil),           // 5: vending_machine.v1.SelectProductRequest
+	(*PaymentRequest)(nil),                 // 6: vending_machine.v1.PaymentRequest
+	(*DispenseRequest)(nil),                // 7: vending_machine.v1.DispenseRequest
+	(*ExecuteCommandRequest)(nil),          // 8: vending_machine.v1.ExecuteCommandRequest
+	(*ExecuteCommandResponse)(nil),         // 9: vending_machine.v1.ExecuteCommandResponse
+	(*DispenseResponse)(nil),               // 10: vending_machine.v1.DispenseResponse
+	(*PaymentResponse)(nil),                // 11: vending_machine.v1.PaymentResponse
+	(*NotifyEventResponse)(nil),            // 12: vending_machine.v1.NotifyEventResponse
+	(*NotifyEventRequest)(nil),             // 13: vending_machine.v1.NotifyEventRequest
+}
 var file_vending_machine_proto_depIdxs = []int32{
 	3,  // 0: vending_machine.v1.GetProductResponse.products:type_name -> vending_machine.v1.Product
 	0,  // 1: vending_machine.v1.ExecuteCommandRequest.type:type_name -> vending_machine.v1.ExecuteCommandRequest.CommandType

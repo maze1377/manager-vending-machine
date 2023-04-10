@@ -16,6 +16,7 @@ type BasicConfigChangeListener interface {
 type Configure struct {
 	config   *viper.Viper
 	LogLevel string
+	Address  string
 }
 
 var (
@@ -46,6 +47,7 @@ func NewConfig(configFile string) error {
 
 func (br *Configure) updateSettings() {
 	br.LogLevel = br.config.GetString("log-level")
+	br.Address = br.config.GetString("addr")
 }
 
 func (br *Configure) OnConfigChanged() {

@@ -33,10 +33,10 @@ race: $(GO_PACKAGES)
 
 lint-fix: develop-dependencies
 	# run go imports for all files
-	find . -name \*.go  -exec goimports -w {} \;
-	find . -name \*.go  -exec gofumpt -w {} \;
-	find . -name \*.go  -exec gci write {} \;
-	fieldalignment -fix ./...;
+	find . -name \*.go -not -path "./pkg/vendingMachineService/*"  -exec goimports -w {} \;
+	find . -name \*.go -not -path "./pkg/vendingMachineService/*" -exec gofumpt -w {} \;
+	find . -name \*.go -not -path "./pkg/vendingMachineService/*" -exec gci write {} \;
+	echo $(GO_PACKAGES) | xargs fieldalignment -fix ;
 
 lint-get:
 	mkdir -p bin
@@ -64,7 +64,7 @@ ROOT := github.com/maze1377/manager-vending-machine
 
 ## Commons Vars ########################################################################################################
 GO_VARS ?=
-GO_PACKAGES := $(shell go list ./... | grep -v /examples/ | grep -v /mocks)
+GO_PACKAGES := $(shell go list ./... | grep -v /examples/ | grep -v /mocks | grep -v /pkg/vendingMachineService)
 GO ?= go
 GIT ?= git
 COMMIT := $(shell $(GIT) rev-parse HEAD)

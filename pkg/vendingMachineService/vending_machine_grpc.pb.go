@@ -8,7 +8,6 @@ package vendingMachineService
 
 import (
 	context "context"
-
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -118,16 +117,15 @@ type VendingMachineServiceServer interface {
 }
 
 // UnimplementedVendingMachineServiceServer should be embedded to have forward compatible implementations.
-type UnimplementedVendingMachineServiceServer struct{}
+type UnimplementedVendingMachineServiceServer struct {
+}
 
 func (UnimplementedVendingMachineServiceServer) GetProduct(context.Context, *GetProductRequest) (*GetProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
 }
-
 func (UnimplementedVendingMachineServiceServer) ExecuteCommand(VendingMachineService_ExecuteCommandServer) error {
 	return status.Errorf(codes.Unimplemented, "method ExecuteCommand not implemented")
 }
-
 func (UnimplementedVendingMachineServiceServer) NotifyEvent(*NotifyEventRequest, VendingMachineService_NotifyEventServer) error {
 	return status.Errorf(codes.Unimplemented, "method NotifyEvent not implemented")
 }
