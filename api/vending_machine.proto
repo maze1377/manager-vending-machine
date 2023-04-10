@@ -85,7 +85,9 @@ message NotifyEventResponse {
   }
 }
 
-message NotifyEventRequest {}
+message NotifyEventRequest {
+  string uid = 6;
+}
 
 service VendingMachineService {
   rpc GetProduct(GetProductRequest) returns (GetProductResponse) {}

@@ -6,5 +6,5 @@ type State interface {
 	AddItem(product *models.Product) error
 	SelectProduct(productName string) error
 	DispenseProduct(productName string) error
-	InsertMoney(coin int) error
+	InsertMoney(coin float32) error
 }

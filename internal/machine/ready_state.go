@@ -31,7 +31,7 @@ func (r *readyState) AddItem(product *models.Product) error {
 	return nil
 }
 
-func (r *readyState) InsertMoney(coin int) error {
+func (r *readyState) InsertMoney(coin float32) error {
 	r.machine.setCurrentState(NewPaymentState(r.machine, coin))
 	return nil
 }

@@ -68,7 +68,7 @@ func (vm *VendingMachine) DispenseProduct(uid, productName string) error {
 	return err
 }
 
-func (vm *VendingMachine) InsertMoney(uid string, coin int) error {
+func (vm *VendingMachine) InsertMoney(uid string, coin float32) error {
 	if !vm.canAccessVendingMachine(uid) {
 		return ErrMachineBusyNow
 	}

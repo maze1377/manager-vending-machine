@@ -7,10 +7,10 @@ import (
 type ProcessPaymentCommand struct {
 	uid           string
 	paymentMethod string
-	coin          int
+	coin          float32
 }
 
-func NewProcessPaymentCommand(uid, paymentMethod string, coin int) Command {
+func NewProcessPaymentCommand(uid, paymentMethod string, coin float32) Command {
 	return &ProcessPaymentCommand{uid: uid, coin: coin, paymentMethod: paymentMethod}
 }
 

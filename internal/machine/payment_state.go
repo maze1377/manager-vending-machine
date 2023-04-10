@@ -1,13 +1,17 @@
 package machine
 
-import "github.com/maze1377/manager-vending-machine/internal/models"
+import (
+	"fmt"
+
+	"github.com/maze1377/manager-vending-machine/internal/models"
+)
 
 type paymentState struct {
 	DefaultBehaviour
-	coins int
+	coins float32
 }
 
-func NewPaymentState(machine *VendingMachine, coins int) State {
+func NewPaymentState(machine *VendingMachine, coins float32) State {
 	return &paymentState{DefaultBehaviour{machine: machine}, coins}
 }
 
@@ -24,7 +28,7 @@ func (p *paymentState) SelectProduct(productName string) error {
 		return ErrNotEnoughMoney
 	}
 	product.Quantity--
-	p.machine.NotifyObservers(models.Payment, "successful", p.coins)
+	p.machine.NotifyObservers(models.Payment, true, fmt.Sprintf("number of coin %f", p.coins))
 	p.machine.setCurrentState(NewDispenseState(p.machine, product))
 	return nil
 }

@@ -20,6 +20,6 @@ func (d *DefaultBehaviour) DispenseProduct(_ string) error {
 	return ErrTransactionNotValid
 }
 
-func (d *DefaultBehaviour) InsertMoney(_ int) error {
+func (d *DefaultBehaviour) InsertMoney(_ float32) error {
 	return ErrTransactionNotValid
 }
