@@ -17,6 +17,7 @@ type Configure struct {
 	config   *viper.Viper
 	LogLevel string
 	Address  string
+	DebugDb  bool
 }
 
 var (
@@ -48,6 +49,7 @@ func NewConfig(configFile string) error {
 func (br *Configure) updateSettings() {
 	br.LogLevel = br.config.GetString("log-level")
 	br.Address = br.config.GetString("addr")
+	br.DebugDb = br.config.GetBool("db.debug")
 }
 
 func (br *Configure) OnConfigChanged() {
