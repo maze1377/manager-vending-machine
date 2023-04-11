@@ -44,6 +44,26 @@ make test
 make race
 ```
 
+### Running the Project with Docker Compose
+
+To simplify the process of running our project, we have included a docker-compose.yml file that defines the required
+services and configurations. To start the project, simply run the following command in your terminal:
+
+```bash
+docker-compose up
+```
+
+This will start all the necessary services and dependencies, allowing you to interact with the program.
+
+To send commands to the program, you can use the client.go file located in the examples directory. Uncomment the command
+type that you want to use and change the -b flag to the appropriate address.
+
+For example, to send a command to a server running on localhost port 10000, you would run:
+
+```bash
+go run ./examples/client.go -b localhost:10000
+```
+
 ### Design Patterns and Architecture
 
 The following design patterns and architecture used for managing a distributed vending machine:

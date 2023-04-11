@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  machine1:
+    build:
+      context: ${PROJECT_ROOT:-.}
+    command: machine -c /config/local.vending.1.yaml
+    volumes:
+      - ${ROOT:-.}:/config
+    network_mode: host
+
+  machine2:
+    build:
+      context: ${PROJECT_ROOT:-.}
+    command: machine -c /config/local.vending.2.yaml
+    volumes:
+      - ${ROOT:-.}:/config
+    network_mode: host
+
+  manager:
+    network_mode: host
+    build:
+      context: ${PROJECT_ROOT:-.}
+    command: manager -c /config/local.sample.yaml
+    volumes:
+      - ${ROOT:-.}:/config
+    depends_on:
+      - machine1
+      - machine2
