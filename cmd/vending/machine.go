@@ -78,7 +78,6 @@ func RunMachine(_ *cobra.Command, _ []string) {
 	if err = gRPCServer.Serve(conn); err != nil {
 		log.WithError(err).Fatal("Error while apiHandler.Serve()")
 	}
-	<-time.After(10 * time.Second)
 }
 
 func handleSignals(shutdown func()) {

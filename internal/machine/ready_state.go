@@ -2,6 +2,7 @@ package machine
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/maze1377/manager-vending-machine/internal/models"
 )
@@ -32,6 +33,7 @@ func (r *readyState) AddItem(product *models.Product) error {
 }
 
 func (r *readyState) InsertMoney(coin float32) error {
+	r.machine.NotifyObservers(models.Payment, true, fmt.Sprintf("number of coin %f", coin))
 	r.machine.setCurrentState(NewPaymentState(r.machine, coin))
 	return nil
 }

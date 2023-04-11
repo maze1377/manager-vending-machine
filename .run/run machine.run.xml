@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run machine" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="vending" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="machine -c local.sample.yaml" />
+    <kind value="PACKAGE" />
+    <package value="github.com/maze1377/manager-vending-machine/cmd/vending" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/cmd/vending/main.go" />
+    <method v="2" />
+  </configuration>
+</component>

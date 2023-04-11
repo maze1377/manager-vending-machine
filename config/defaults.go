@@ -9,4 +9,5 @@ func setDefaults(config *viper.Viper) {
 	config.SetDefault("addr", "0.0.0.0:10000")
 	config.SetDefault("db.debug", true)
 	config.SetDefault("metric.addr", "0.0.0.0:8080")
+	config.SetDefault("machine.addr", []string{})
 }

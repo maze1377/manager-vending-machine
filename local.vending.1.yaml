@@ -7,4 +7,3 @@ metric:
 machine:
   addr:
     - localhost:10000
-    - localhost:10001

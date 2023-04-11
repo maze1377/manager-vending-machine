@@ -14,11 +14,12 @@ type BasicConfigChangeListener interface {
 }
 
 type Configure struct {
-	config     *viper.Viper
-	LogLevel   string
-	Address    string
-	MetricAddr string
-	DebugDb    bool
+	config      *viper.Viper
+	LogLevel    string
+	Address     string
+	MetricAddr  string
+	VendingAddr []string
+	DebugDb     bool
 }
 
 var (
@@ -52,6 +53,7 @@ func (br *Configure) updateSettings() {
 	br.Address = br.config.GetString("addr")
 	br.DebugDb = br.config.GetBool("db.debug")
 	br.MetricAddr = br.config.GetString("metric.addr")
+	br.VendingAddr = br.config.GetStringSlice("machine.addr")
 }
 
 func (br *Configure) OnConfigChanged() {

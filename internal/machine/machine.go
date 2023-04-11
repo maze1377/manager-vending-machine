@@ -112,7 +112,7 @@ func (vm *VendingMachine) RemoveObserver(id string) {
 func (vm *VendingMachine) NotifyObservers(event models.Event, date ...interface{}) {
 	vm.observers.Range(func(key, value interface{}) bool {
 		fn := value.(func(event models.Event, date ...interface{}))
-		fn(event, date)
+		fn(event, date...)
 		return true
 	})
 }

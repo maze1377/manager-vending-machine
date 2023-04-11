@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -41,26 +42,29 @@ func RunManager(_ *cobra.Command, _ []string) {
 
 	// todo read from config
 	uid := "cmd-runner"
-	configGRPC := &communication.GRPCCommunicator{
-		URL:         "localhost:10000",
-		ServiceName: "first machine",
-		Redial:      1,
-		Insecure:    true,
-		Lock:        &sync.Mutex{},
-	}
 	managerService := service.NewManagerService(repository, uid)
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
-	go func() {
-		err := managerService.AttachToMachine(ctx, configGRPC)
-		if err != nil {
-			log.WithError(err).Error("can not attach to machine")
-		}
-	}()
+	for _, addr := range config.Instance.VendingAddr {
+		go func(machineAddr string) {
+			configGRPC := &communication.GRPCCommunicator{
+				URL:         machineAddr,
+				ServiceName: fmt.Sprintf("machine with ip %s", machineAddr),
+				Redial:      1,
+				Insecure:    true,
+				Lock:        &sync.Mutex{},
+			}
+			err := managerService.AttachToMachine(ctx, configGRPC)
+			if err != nil {
+				log.WithError(err).Error("can not attach to machine")
+			}
+		}(addr)
+	}
+
 	handleSignals(func() {
+		cancel()
 		done <- struct{}{}
-		defer cancel()
 	})
 	<-done
-	<-time.After(10 * time.Second)
+	<-time.After(1 * time.Second)
 }
