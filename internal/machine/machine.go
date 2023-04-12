@@ -6,9 +6,9 @@ import (
 	"github.com/maze1377/manager-vending-machine/internal/models"
 )
 
-// TODO We need to implement a mechanism to reset the Vending Machine system from a non-idle state to an idle state if no commands are received within a certain time period. This mechanism is commonly referred to as a 'watchdog'."
+// TODO We need to implement a mechanism to reset the Vending Machine system from a non-idle State to an idle State if no commands are received within a certain time period. This mechanism is commonly referred to as a 'watchdog'."
 
-type VendingMachine struct {
+type vendingMachine struct {
 	currentState State
 	observers    sync.Map
 	uidWorker    string
@@ -17,7 +17,7 @@ type VendingMachine struct {
 	lState       sync.Mutex
 }
 
-func (vm *VendingMachine) canAccessVendingMachine(uid string) bool {
+func (vm *vendingMachine) canAccessVendingMachine(uid string) bool {
 	vm.lSession.Lock()
 	defer vm.lSession.Unlock()
 	if vm.uidWorker != "" && vm.uidWorker != uid {
@@ -29,7 +29,7 @@ func (vm *VendingMachine) canAccessVendingMachine(uid string) bool {
 	return true
 }
 
-func (vm *VendingMachine) AddItem(uid string, product *models.Product) error {
+func (vm *vendingMachine) AddItem(uid string, product *models.Product) error {
 	if !vm.canAccessVendingMachine(uid) {
 		return ErrMachineBusyNow
 	}
@@ -44,7 +44,7 @@ func (vm *VendingMachine) AddItem(uid string, product *models.Product) error {
 	return err
 }
 
-func (vm *VendingMachine) SelectProduct(uid, productName string) error {
+func (vm *vendingMachine) SelectProduct(uid, productName string) error {
 	if !vm.canAccessVendingMachine(uid) {
 		return ErrMachineBusyNow
 	}
@@ -53,7 +53,7 @@ func (vm *VendingMachine) SelectProduct(uid, productName string) error {
 	return vm.currentState.SelectProduct(productName)
 }
 
-func (vm *VendingMachine) DispenseProduct(uid, productName string) error {
+func (vm *vendingMachine) DispenseProduct(uid, productName string) error {
 	if !vm.canAccessVendingMachine(uid) {
 		return ErrMachineBusyNow
 	}
@@ -68,7 +68,7 @@ func (vm *VendingMachine) DispenseProduct(uid, productName string) error {
 	return err
 }
 
-func (vm *VendingMachine) InsertMoney(uid string, coin float32) error {
+func (vm *vendingMachine) InsertMoney(uid string, coin float32) error {
 	if !vm.canAccessVendingMachine(uid) {
 		return ErrMachineBusyNow
 	}
@@ -77,18 +77,18 @@ func (vm *VendingMachine) InsertMoney(uid string, coin float32) error {
 	return vm.currentState.InsertMoney(coin)
 }
 
-func NewVendingMachine(products []*models.Product) *VendingMachine {
-	vm := &VendingMachine{products: products}
+func NewVendingMachine(products []*models.Product) VendingState {
+	vm := &vendingMachine{products: products}
 	vm.currentState = NewReadyState(vm)
 	return vm
 }
 
-func (vm *VendingMachine) GetProducts() []*models.Product {
+func (vm *vendingMachine) GetProducts() []*models.Product {
 	// maybe we want to isolate VendingMachine so we should copy product list.
 	return vm.products
 }
 
-func (vm *VendingMachine) findItem(productName string) (*models.Product, error) {
+func (vm *vendingMachine) findItem(productName string) (*models.Product, error) {
 	for _, product := range vm.products {
 		if product.Name == productName {
 			return product, nil
@@ -97,19 +97,19 @@ func (vm *VendingMachine) findItem(productName string) (*models.Product, error) 
 	return nil, ErrProductNotFound
 }
 
-func (vm *VendingMachine) addNewProduct(product *models.Product) {
+func (vm *vendingMachine) addNewProduct(product *models.Product) {
 	vm.products = append(vm.products, product)
 }
 
-func (vm *VendingMachine) AddObserver(id string, fn func(event models.Event, date ...interface{})) {
+func (vm *vendingMachine) AddObserver(id string, fn func(event models.Event, date ...interface{})) {
 	vm.observers.Store(id, fn)
 }
 
-func (vm *VendingMachine) RemoveObserver(id string) {
+func (vm *vendingMachine) RemoveObserver(id string) {
 	vm.observers.Delete(id)
 }
 
-func (vm *VendingMachine) NotifyObservers(event models.Event, date ...interface{}) {
+func (vm *vendingMachine) NotifyObservers(event models.Event, date ...interface{}) {
 	vm.observers.Range(func(key, value interface{}) bool {
 		fn := value.(func(event models.Event, date ...interface{}))
 		fn(event, date...)
@@ -117,6 +117,6 @@ func (vm *VendingMachine) NotifyObservers(event models.Event, date ...interface{
 	})
 }
 
-func (vm *VendingMachine) setCurrentState(currentState State) {
+func (vm *vendingMachine) setCurrentState(currentState State) {
 	vm.currentState = currentState
 }

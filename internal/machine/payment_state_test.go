@@ -13,7 +13,7 @@ func TestPaymentState_SelectProduct(t *testing.T) {
 		{Name: "Pepsi", Price: 60, Quantity: 3},
 		{Name: "Sprite", Price: 40, Quantity: 0},
 	}
-	vm := NewVendingMachine(products)
+	vm := &vendingMachine{products: products}
 
 	// Set the current state to PaymentState with 100 coins
 	vm.setCurrentState(NewPaymentState(vm, 50))

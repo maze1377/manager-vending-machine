@@ -11,7 +11,7 @@ type dispenseState struct {
 	product *models.Product
 }
 
-func NewDispenseState(machine *VendingMachine, product *models.Product) State {
+func NewDispenseState(machine *vendingMachine, product *models.Product) State {
 	return &dispenseState{DefaultBehaviour{machine: machine}, product}
 }
 

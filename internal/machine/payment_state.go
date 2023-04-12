@@ -5,7 +5,7 @@ type paymentState struct {
 	coins float32
 }
 
-func NewPaymentState(machine *VendingMachine, coins float32) State {
+func NewPaymentState(machine *vendingMachine, coins float32) State {
 	return &paymentState{DefaultBehaviour{machine: machine}, coins}
 }
 

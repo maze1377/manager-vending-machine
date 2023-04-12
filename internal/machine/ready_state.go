@@ -11,7 +11,7 @@ type readyState struct {
 	DefaultBehaviour
 }
 
-func NewReadyState(machine *VendingMachine) State {
+func NewReadyState(machine *vendingMachine) State {
 	return &readyState{
 		DefaultBehaviour{machine: machine},
 	}

@@ -8,7 +8,7 @@ import (
 
 func TestDefaultBehaviour_state_call(t *testing.T) {
 	// Create a new VendingMachine without product
-	vm := NewVendingMachine(nil)
+	vm := &vendingMachine{}
 
 	// Set the current state to DefaultBehaviour
 	vm.setCurrentState(&DefaultBehaviour{machine: vm})

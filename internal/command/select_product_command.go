@@ -13,6 +13,6 @@ func NewSelectProductCommand(uid, productName string) Command {
 	return &SelectProductCommand{uid: uid, productName: productName}
 }
 
-func (s *SelectProductCommand) Execute(vm *machine.VendingMachine) error {
+func (s *SelectProductCommand) Execute(vm machine.VendingState) error {
 	return vm.SelectProduct(s.uid, s.productName)
 }

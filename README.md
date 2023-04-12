@@ -91,18 +91,12 @@ object would transition between states as it performs different operations.
 concepts, such as items, payments, and dispensing. This approach can help to create a clear understanding of the
 system's behavior and requirements and can guide the design of the system's architecture and APIs.
 
-6-CQRS and Event Sourcing: Command Query Responsibility Segregation (CQRS) and Event Sourcing can be used to separate
-the
-write and read operations in the vending machine system. CQRS can be used to handle the write operations, such as adding
-items to the inventory, while Event Sourcing can be used to store a log of events that represent changes to the system's
-state. This approach can provide a scalable and resilient way to manage the vending machine's state and improve
-performance.
 
-7-Load Balancing: Load balancing can be used to distribute the workload across multiple instances of the vending machine
+6-Load Balancing: Load balancing can be used to distribute the workload across multiple instances of the vending machine
 system. This can improve scalability and fault tolerance by ensuring that the system can handle a large number of
 requests and can recover from failures without affecting the user experience.
 
-8-GRPC Service: GRPC is a communication framework that allows vending machines to communicate with a central server or
+7-GRPC Service: GRPC is a communication framework that allows vending machines to communicate with a central server or
 set
 of servers. The GRPC service would define the messages and operations that the server can perform on the vending
 devices, such as dispensing products and updating inventory.

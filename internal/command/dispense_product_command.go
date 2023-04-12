@@ -13,6 +13,6 @@ func NewDispenseProductCommand(uid, productName string) Command {
 	return &DispenseProductCommand{uid: uid, productName: productName}
 }
 
-func (d DispenseProductCommand) Execute(vm *machine.VendingMachine) error {
+func (d DispenseProductCommand) Execute(vm machine.VendingState) error {
 	return vm.DispenseProduct(d.uid, d.productName)
 }

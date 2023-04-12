@@ -2,18 +2,11 @@ package machine
 
 import (
 	"testing"
-
-	"github.com/maze1377/manager-vending-machine/internal/models"
 )
 
 func TestMachine_session_user(t *testing.T) {
 	// Create a new VendingMachine instance with some products
-	products := []*models.Product{
-		{Name: "Coke", Price: 50, Quantity: 5},
-		{Name: "Pepsi", Price: 60, Quantity: 3},
-		{Name: "Sprite", Price: 40, Quantity: 2},
-	}
-	vm := NewVendingMachine(products)
+	vm := &vendingMachine{}
 
 	// Set the current state to ReadyState
 	vm.setCurrentState(NewReadyState(vm))

@@ -15,7 +15,7 @@ import (
 )
 
 type MachineService struct { // todo add monitoring
-	vm *machine.VendingMachine
+	vm machine.VendingState
 }
 
 func (m *MachineService) GetProduct(ctx context.Context, _ *pb.GetProductRequest) (*pb.GetProductResponse, error) {
@@ -201,6 +201,6 @@ func (m *MachineService) NotifyEvent(request *pb.NotifyEventRequest, server pb.V
 	return status.Errorf(codes.Unknown, "error to send notification: %s", err)
 }
 
-func NewMachineService(vm *machine.VendingMachine) *MachineService {
+func NewMachineService(vm machine.VendingState) *MachineService {
 	return &MachineService{vm: vm}
 }

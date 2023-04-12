@@ -27,8 +27,8 @@ func main() {
 
 	client := pb.NewVendingMachineServiceClient(conn)
 
-	callExecuteCommandRequestAddProduct(client)
-	// callExecuteCommandRequestProcessPayment(client)
+	// callExecuteCommandRequestAddProduct(client)
+	callExecuteCommandRequestProcessPayment(client)
 	// callExecuteCommandRequestSelectItem(client)
 	// callExecuteCommandRequestDispenseProduct(client)
 }

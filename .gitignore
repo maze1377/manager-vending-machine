@@ -119,3 +119,4 @@ vendingd
 bin/
 .test.profile.cov
 !.idea/runConfigurations/
+coverage.html

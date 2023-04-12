@@ -13,7 +13,7 @@ func TestDispenseState_DispenseProduct(t *testing.T) {
 		{Name: "Pepsi", Price: 60, Quantity: 3},
 		{Name: "Sprite", Price: 40, Quantity: 2},
 	}
-	vm := NewVendingMachine(products)
+	vm := &vendingMachine{products: products}
 
 	// Set the current state to DispenseState with the "Coke" product
 	product, _ := vm.findItem("Coke")

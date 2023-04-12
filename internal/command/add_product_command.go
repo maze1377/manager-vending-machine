@@ -14,6 +14,6 @@ func NewAddProductCommand(uid string, product *models.Product) Command {
 	return &AddProductCommand{uid: uid, product: product}
 }
 
-func (a *AddProductCommand) Execute(vm *machine.VendingMachine) error {
+func (a *AddProductCommand) Execute(vm machine.VendingState) error {
 	return vm.AddItem(a.uid, a.product)
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type DefaultBehaviour struct {
-	machine *VendingMachine
+	machine *vendingMachine
 }
 
 func (d *DefaultBehaviour) AddItem(_ *models.Product) error {
